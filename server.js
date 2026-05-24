@@ -1,11 +1,10 @@
-import express from 'express'; 
-import _ from 'underscore';
-import morgan from 'morgan';  
-import Connection from './connection.js';
 import cors from 'cors';
+import express from 'express';
+import morgan from 'morgan';
+import Connection from './connection.js';
 
 
-import studentRoutes from './api/studentRoutes.js'; 
+import studentRoutes from './api/studentRoutes.js';
 
 Connection(); //call the Connection function
 
@@ -15,8 +14,8 @@ const port = 3000;
 app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
-app.use(cors()); //accept request(s) from cross domains
-app.use(express.json());
+app.use(cors()); //accept request(s) from different origins (domain/port)
+app.use(express.json()); //converts JSON data sent from the client into a JavaScript object
 
 //link studentRoutes to server
 app.use("/api/students",studentRoutes);
