@@ -6,21 +6,40 @@ const router = express.Router();
 router.get("/",async (req,res)=>{
     try{
     const response = await Student.find({});
-    res.status(200).send(response);
+    if(!response){
+        res.status(404).json({msg:"Student is not found"});
+    }
+    res.status(200).json(response);
     }catch(err){
-        res.status(500).send("Error in fetching students: "+err);
+        res.status(500).json({msg:"Error in fetching students:"});
     }
 });
 
-router.get("/insert", async (req,res)=>{
+//get a student by id
+router.get("/:id",async (req,res)=>{
     try{
-    const newStudent = {name:"Matt", gpa:3.90};
-    const response = await Student.insertOne(newStudent);
-    res.status(200).send(response);
+     const id = req.params.id;    
+    const response = await Student.findById(id);
+    if(!response){
+        res.status(404).json({msg:"Student is not found"});
+    }
+    res.status(200).json(response);
     }catch(err){
-        res.status(500).send("Error in fetching students: "+err);
+        res.status(500).json({msg:"Error in fetching students:"});
     }
 });
+
+//add a new student
+router.post("/add", async (req,res)=>{
+    try{
+    const newStudent = req.body;
+    const response = await Student.insertOne(newStudent);
+    res.status(201).json(response);
+    }catch(err){
+        res.status(500).json({error:"Error in fetching students:"});
+    }
+});
+
 
 router.get("/delete", async (req,res)=>{
     try{
