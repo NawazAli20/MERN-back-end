@@ -50,13 +50,20 @@ router.get("/delete", async (req,res)=>{
     }
 });
 
-router.get("/update/:gpa", async (req,res)=>{
+//update a student by id
+router.put("/update/:id", async (req,res)=>{
     try{
-    const gpa = req.params.gpa;
-    const response = await Student.updateOne({name:"Matt"},{$set:{gpa:gpa}});
-    res.status(200).send(response);
+    const id = req.params.id;
+    const student = req.body;
+    const response = await Student.updateOne({_id:id},student);
+    if(response.matchedCount>0){
+        res.status(200).json(response);
+    }else{
+        res.status(404).json({err:"Student is not found with the given id"})
+    }
+    
     }catch(err){
-        res.status(500).send("Error in fetching students: "+err);
+        res.status(500).json({err:"Error in fetching students"});
     }
 });
 
